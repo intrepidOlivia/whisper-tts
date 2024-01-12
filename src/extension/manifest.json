@@ -1,0 +1,24 @@
+{
+    "manifest_version": 3,
+    "name": "",
+    "description": "An extension to use OpenAI APIs to read webpage text out loud.",
+    "version": "1.0.0",
+    "icons": {
+        "48": "icon_48.png",
+        "128": "icon_128.png",
+        "16": "icon_16.png"
+    },
+    "action": {
+        "default_icon": "icon_48.png",
+        "default_title": "Read Me This Webpage",
+        "default_popup": "popup.html"
+    },
+    "web_accessible_resources": [
+    ],
+    "background": {
+    },
+    "permissions": [
+    ],
+    "host_permissions": [
+    ]
+}
