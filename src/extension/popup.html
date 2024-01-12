@@ -1,20 +1,20 @@
 <html>
-    <head>
+    <body>
         <script src="popup.js"></script>
-    </head>
-    <body onload="initializePopup()">
         <div id="not-logged-in">
-            <div><form name="save-openai-key" onsubmit="return saveOpenAIKey()" ><label for="openai-key-input">OpenAI API Key</label><input type="text" name="openai-key-input" /> <input type="submit" value="Save" /></form></div>
+            <div><form name="save-openai-key"><label for="openai-key-input">OpenAI API Key</label><input id="openai-key-input" type="text" name="openai-key-input" /> <input type="submit" value="Save" /></form></div>
             <div id="key-disclaimer">This extension does not send or store your key anywhere except for your local device and the OpenAI Auth endpoints.</div>
         </div>
         <div id="logged-in" class="hidden">
-            <div><label for="saved-openai-key">Saved OpenAI Key</label><input id="saved-openai-key" type="password" readonly name="saved-openai-key" /><button onclick="unsaveOpenAIKey()">Remove Key</button></div>
-            <div>
+            <label for="read_webpage_submit">Read This Webpage To Me</label><button id="read_webpage_submit">Read This Webpage To Me</button>
+            <div id="interaction_main">
                 Select Whisper AI Voice: 
                 <select>
-
+                    
                 </select>
             </div>
+            <div id="audio_player"></div>
+            <div><label for="saved-openai-key">Saved OpenAI Key</label><input id="saved-openai-key" type="password" readonly name="saved-openai-key" /><button id="unsave_key_btn">Remove Key</button></div>
         </div>
     </body>
 </html>
