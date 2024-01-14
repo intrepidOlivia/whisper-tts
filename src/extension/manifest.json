@@ -18,8 +18,11 @@
     "background": {
     },
     "permissions": [
+        "activeTab",
+        "scripting",
         "storage"
     ],
     "host_permissions": [
     ]
 }
+
