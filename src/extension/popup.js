@@ -1,6 +1,7 @@
 window.onload = initializePopup;
 let pageText = [];
 let playbackCursor = 0;
+let audioPlayer;
 const CHAR_REQUEST_LIMIT = 2048;
 const OPENAI_KEY_STORAGE_KEY = 'openai_key';
 
@@ -13,6 +14,9 @@ async function initializePopup() {
     const readToMeButton = document.querySelector('#read_webpage_submit');
     readToMeButton.addEventListener('click', initializeReadPageContent);
     chrome.runtime.onMessage.addListener(receivePageText);
+
+    // Set up audio
+    audioPlayer = document.querySelector('#tts');
 
     const bytesStored = await chrome.storage.local.getBytesInUse(OPENAI_KEY_STORAGE_KEY);
     if (bytesStored === 0) {
@@ -63,7 +67,7 @@ async function initializeReadPageContent() {
     });
 
     // Display the media controls
-    document.querySelector('#audio_player').classList.remove('hidden');
+    document.querySelector('#audio_player_wrapper').classList.remove('hidden');
     
 }
 
@@ -71,7 +75,6 @@ function receivePageText(request, sender, _) {
     if (request.pageText) {
         // Store text for sending to openAI;
         pageText = splitStringIntoRequestChunks(request.pageText);
-        console.log('Chunked page text:', pageText);
     }
 
     // Send request to openAI
@@ -102,11 +105,18 @@ async function requestAudioForText(text) {
             console.error('Unsuccessful request to OpenAI:', errorResponse);
             throw new Error('Unsuccessful request to OpenAI');
         }
-        console.log('What response did we get from OpenAI?', response);
+        playAudioResponse(response);
     })
     .catch(err => {
         console.error(err);
     });
+}
+
+async function playAudioResponse(response) {
+    const blob = await response.blob();
+    audioPlayer.src = URL.createObjectURL(blob);
+    audioPlayer.load();
+    audioPlayer.play();
 }
 
 async function getAuthHeader() {

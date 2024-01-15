@@ -13,13 +13,73 @@
                     
                 </select>
             </div>
-            <div id="audio_player" class="hidden"></div>
-            <div><label for="saved-openai-key">Saved OpenAI Key</label><input id="saved-openai-key" type="password" readonly name="saved-openai-key" /><button id="unsave_key_btn">Remove Key</button></div>
+            <div id="audio_player_wrapper" class="hidden">
+                <audio id="tts" controls>
+                    <source id="audioSource" src="" type="audio/aac">
+                    Sorry, your browser does not support HTML audio.
+                </audio>
+                <button id="play_next">Play Next</button>
+            </div>
+            <div id="logout_section"><label for="saved-openai-key">Saved OpenAI Key</label><input disabled id="saved-openai-key" type="password" readonly name="saved-openai-key" /><button id="unsave_key_btn">Remove Key</button></div>
         </div>
     </body>
 </html>
 
 <style>
+    html {
+        width: 400px;
+        height: 300px;
+    }
+
+    body {
+        height: 100%;
+        width: 100%;
+    }
+
+    #logout_section {
+        position: absolute;
+        bottom: 0;
+        background-color: #c7c7c7;
+        right: 0;
+        left: 0;
+        display: flex;
+        justify-content: space-evenly;
+        padding: 5px;
+    }
+
+    #progress {
+        width: 380px;
+        background-color: #d9d9f2; 
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    #progress_bar {
+        width: 0%;
+        height: 5px;
+        background-color: #ffc266;
+        border-radius: 10px;
+    }
+
+    .player {
+        width: 380px;
+        padding: 10px;
+        background-color: #373737;
+    }
+
+    .player_buttons, .player_info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .action_button {
+        cursor: pointer;
+        width: 30px;
+        padding: 5px;
+        margin: 18px 0;
+    }
+
     .hidden {
         display: none;
     }
