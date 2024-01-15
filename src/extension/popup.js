@@ -14,6 +14,8 @@ async function initializePopup() {
     const readToMeButton = document.querySelector('#read_webpage_submit');
     readToMeButton.addEventListener('click', initializeReadPageContent);
     chrome.runtime.onMessage.addListener(receivePageText);
+    const playNextButton = document.querySelector('#play_next');
+    playNextButton.addEventListener('click', playNextChunk);
 
     // Set up audio
     audioPlayer = document.querySelector('#tts');
@@ -77,11 +79,15 @@ function receivePageText(request, sender, _) {
         pageText = splitStringIntoRequestChunks(request.pageText);
     }
 
+    // Set up blob caching
+
+
     // Send request to openAI
     requestAudioForText(pageText[playbackCursor]);
 }
 
 async function requestAudioForText(text) {
+    showSpinner();
     const headers = {
         ...await getAuthHeader(),
         'Content-Type': 'application/json'
@@ -116,7 +122,13 @@ async function playAudioResponse(response) {
     const blob = await response.blob();
     audioPlayer.src = URL.createObjectURL(blob);
     audioPlayer.load();
+    hideSpinner();
     audioPlayer.play();
+}
+
+function playNextChunk() {
+    playbackCursor += 1;
+    requestAudioForText(pageText[playbackCursor]);
 }
 
 async function getAuthHeader() {
@@ -139,6 +151,9 @@ function splitStringIntoRequestChunks(totalString) {
         if ((chunk.length + sentenceLength) < CHAR_REQUEST_LIMIT) {
             chunk += sentences[cursor] + '. ';
             cursor += 1;
+            if (cursor >= sentences.length) {
+                strArray.push(chunk);
+            }
         } else {
             strArray.push(chunk);
             chunk = '';
@@ -158,4 +173,12 @@ function showLoggedOutUI() {
     document.querySelector('#saved-openai-key').value = '';
     document.querySelector('#not-logged-in').classList.remove('hidden');
     document.querySelector('#logged-in').classList.add('hidden');
+}
+
+function showSpinner() {
+    document.querySelector('#spinner').classList.remove('hidden');
+}
+
+function hideSpinner() {
+    document.querySelector('#spinner').classList.add('hidden');
 }
